@@ -1,7 +1,11 @@
+import { useContext } from "react";
+import { UserContext } from "../../lib/context";
+
 export default function UserProfilePage({}) {
+  const [user, username] = useContext(UserContext);
   return (
     <main>
-      <h1>Profile</h1>
+      <h1>User Profile</h1>
     </main>
   );
 }
