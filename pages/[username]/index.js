@@ -1,13 +1,37 @@
-import { useContext } from "react";
-import { UserContext } from "../../lib/context";
+import UserProfile from "../../components/UserProfile";
+import PostFeed from "../../components/PostFeed";
+import { getUserWithUsername, postToJSON } from "../../lib/firebase";
 
-export default function UserProfilePage({}) {
-  const [user, username] = useContext(UserContext);
+export async function getServerSideProps({ query }) {
+  const { username } = query;
+
+  const userDoc = await getUserWithUsername(username);
+
+  // JSON serializable data
+  let user = null;
+  let posts = null;
+
+  if (userDoc) {
+    user = userDoc.data();
+    const postsQuery = userDoc.ref
+      .collection("posts")
+      .where("published", "==", true)
+      .orderBy("createdAt", "desc")
+      .limit(5);
+
+    posts = (await postsQuery.get()).docs.map(postToJSON);
+  }
+
+  return {
+    props: { user, posts }, // passed to page component as props
+  };
+}
+
+export default function UserProfilePage({ user, posts }) {
   return (
     <main>
-      <h1>User Profile</h1>
+      <UserProfile user={user} />
+      <PostFeed posts={posts} />
     </main>
   );
 }
-// recall: static routes have priority, so this doesn't conflict with e.g.,
-// localhost:3000/admin
