@@ -2,6 +2,7 @@ import MetaTags from "../../components/Metatags";
 import { firestore, auth, serverTimestamp } from "../../lib/firebase";
 import AuthCheck from "../../components/AuthCheck";
 import styles from "../../styles/Admin.module.css";
+import ImageUploader from "../../components/ImageUploader";
 
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { useForm, ErrorMessage } from "react-hook-form";
@@ -91,6 +92,7 @@ function PostForm({ defaultValues, postRef, preview }) {
         </div>
       )}
       <div className={preview ? styles.hidden : styles.controls}>
+        <ImageUploader />
         <textarea
           {...register("content", {
             required: { value: true, message: "content is required" },
