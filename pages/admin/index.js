@@ -1,6 +1,8 @@
 import AuthCheck from "../../components/AuthCheck";
 import { firestore, auth } from "../../lib/firebase";
 import PostFeed from "../../components/PostFeed";
+import Loader from "../../components/Loader";
+
 import { UserContext } from "../../lib/context";
 import { useContext, useState } from "react";
 import { useRouter } from "next/router";
@@ -8,7 +10,6 @@ import { useRouter } from "next/router";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { kebabCase } from "lodash";
 import toast from "react-hot-toast";
-import { async } from "@firebase/util";
 import { serverTimestamp } from "firebase/firestore";
 import styles from "../../styles/Admin.module.css";
 
@@ -33,7 +34,6 @@ function PostList() {
   const [querySnapshot] = useCollection(query);
 
   const posts = querySnapshot?.docs.map((doc) => doc.data());
-
   return (
     <>
       <h1>Manage your posts</h1>
@@ -46,6 +46,7 @@ function CreateNewPost() {
   const router = useRouter();
   const { username } = useContext(UserContext);
   const [title, setTitle] = useState("");
+  // const [loading, setLoading] = useState(false);
 
   // Verify slug is URL safe
   const slug = encodeURI(kebabCase(title));
