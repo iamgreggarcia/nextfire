@@ -1,4 +1,5 @@
 import MetaTags from "../../components/Metatags";
+import AuthCheck from "../../components/AuthCheck";
 
 export default function AdminPostsEdit({}) {
   return (
