@@ -1,12 +1,7 @@
-import firebase from "firebase/compat";
-import { useDocumentData } from 'react-firebase-hooks/firestore';
-
-import {
-  getUserWithUsername,
-  firestore,
-  fromMillis,
-  postToJSON,
-} from "../lib/firebase";
+import styles from "../../styles/Post.module.css";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import PostContent from "../../components/PostContent";
+import { getUserWithUsername, firestore, postToJSON } from "../../lib/firebase";
 
 export async function getStaticProps({ params }) {
   const { username, slug } = params;
@@ -27,20 +22,12 @@ export async function getStaticProps({ params }) {
   };
 }
 
-export default function Post({}) {
-  return (
-    <main>
-      <h1>Public Posts</h1>
-    </main>
-  );
-}
-
 export async function getStaticPaths() {
   // TODO: imporve functionality by using Admin SDK to select empty docs
   const snapshot = await firestore.collectionGroup("posts").get();
 
   const paths = snapshot.docs.map((doc) => {
-    const { slug, username } = doc.date();
+    const { slug, username } = doc.data();
     return {
       params: { username, slug },
     };
@@ -53,7 +40,6 @@ export async function getStaticPaths() {
   };
 }
 
-
 export default function Post(props) {
   const postRef = firestore.doc(props.path);
   const [realtimePost] = useDocumentData(postRef);
@@ -62,7 +48,6 @@ export default function Post(props) {
 
   return (
     <main className={styles.container}>
-
       <section>
         <PostContent post={post} />
       </section>
@@ -71,7 +56,6 @@ export default function Post(props) {
         <p>
           <strong>{post.heartCount || 0} 🤍</strong>
         </p>
-
       </aside>
     </main>
   );

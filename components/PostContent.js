@@ -1,6 +1,6 @@
 import { isDate } from "lodash";
 import Link from "next/link";
-import { ReactMarkdown } from "react-markparamsdown/lib/react-markdown";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
 export default function PostContent({ post }) {
   const createdAt =
