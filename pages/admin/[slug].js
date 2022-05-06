@@ -4,7 +4,7 @@ import AuthCheck from "../../components/AuthCheck";
 import styles from "../../styles/Admin.module.css";
 
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { useForm } from "react-hook-form";
+import { useForm, ErrorMessage } from "react-hook-form";
 import ReactMarkdown from "react-markdown";
 import { useState } from "react";
 import { useRouter } from "next/router";
@@ -63,10 +63,12 @@ function PostManager() {
 }
 
 function PostForm({ defaultValues, postRef, preview }) {
-  const { register, handleSubmit, reset, watch } = useForm({
+  const { register, handleSubmit, reset, watch, formState } = useForm({
     defaultValues,
     mode: "onChange",
   });
+
+  const { isValid, isDirty } = formState;
 
   const updatePost = async ({ content, published }) => {
     await postRef.update({
@@ -89,15 +91,17 @@ function PostForm({ defaultValues, postRef, preview }) {
         </div>
       )}
       <div className={preview ? styles.hidden : styles.controls}>
-        {/* <textarea name="content" ref={register}></textarea> */}
-        <textarea {...register("content")} />
+        <textarea
+          {...register("content", {
+            required: { value: true, message: "content is required" },
+            minLength: { value: 10, message: "content is too short" },
+            maxLength: { value: 2000, message: "content is too long" },
+          })}
+        ></textarea>
+        {formState.errors.content && (
+          <p className="text-danger">{formState.errors.content.message}</p>
+        )}
         <fieldset>
-          {/* <input
-            className={styles.checkbox}
-            name="published"
-            type="checkbox"
-            ref={register}
-          /> */}
           <input
             type="checkbox"
             className={styles.checkbox}
@@ -105,7 +109,11 @@ function PostForm({ defaultValues, postRef, preview }) {
           />
           <label>Published</label>
         </fieldset>
-        <button type="submit" className="btn-green">
+        <button
+          type="submit"
+          className="btn-green"
+          disabled={!isDirty || !isValid}
+        >
           Save Changes
         </button>
       </div>
