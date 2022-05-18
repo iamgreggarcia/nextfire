@@ -69,6 +69,7 @@ function UsernameForm() {
     const val = e.target.value.toLowerCase();
 
     // Regex for username
+    // TODO: modify to allow for hyphens (-)
     const re = /^(?=[a-zA-Z0-9._]{3,15}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
 
     if (val.length < 3) {
