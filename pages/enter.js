@@ -2,6 +2,7 @@ import { auth, firestore, googleAuthProvider } from "../lib/firebase";
 import { useContext, useEffect, useState, useCallback } from "react";
 import { UserContext } from "../lib/context";
 import { debounce } from "lodash";
+import toast from "react-hot-toast";
 
 export default function Enter(props) {
   const { user, username } = useContext(UserContext);
@@ -104,7 +105,6 @@ function UsernameForm() {
     // Create references for both documents
     const userDoc = firestore.doc(`users/${user.uid}`);
     const usernameDoc = firestore.doc(`usernames/${formValue}`);
-
     // Commit together as a batch write
     const batch = firestore.batch();
     batch.set(userDoc, {
@@ -113,8 +113,12 @@ function UsernameForm() {
       displayName: user.displayName,
     });
     batch.set(usernameDoc, { uid: user.uid });
-
-    await batch.commit();
+    try {
+      await batch.commit();
+      toast.success(`Success! Username ${formValue} created.`);
+    } catch (error) {
+      toast.error(`Error: ${error}`);
+    }
   };
 
   return (
