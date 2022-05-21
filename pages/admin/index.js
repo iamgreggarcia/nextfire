@@ -11,15 +11,25 @@ import { kebabCase } from "lodash";
 import toast from "react-hot-toast";
 import { serverTimestamp } from "firebase/firestore";
 import styles from "../../styles/Admin.module.css";
+import Link from "next/link";
 
 export default function AdminPostsPage({}) {
   return (
     <main>
       <AuthCheck>
+        <LogOut />
         <PostList />
         <CreateNewPost />
       </AuthCheck>
     </main>
+  );
+}
+
+function LogOut() {
+  return (
+    <Link href="/enter">
+      <button> Log Out</button>
+    </Link>
   );
 }
 
@@ -83,19 +93,21 @@ function CreateNewPost() {
   };
 
   return (
-    <form onSubmit={createPost}>
-      <input
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="My awesome article title"
-        className={styles.input}
-      />
-      <p>
-        <strong>Slug:</strong> {slug}
-      </p>
-      <button type="submit" disabled={!isValid} className="btn-green">
-        Create New Post
-      </button>
-    </form>
+    <div className="create-username">
+      <form onSubmit={createPost}>
+        <input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="My awesome article title"
+          className={styles.input}
+        />
+        <p>
+          <strong>Slug:</strong> {slug}
+        </p>
+        <button type="submit" disabled={!isValid} className="btn-green">
+          Create New Post
+        </button>
+      </form>
+    </div>
   );
 }

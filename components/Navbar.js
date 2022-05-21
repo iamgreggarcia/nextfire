@@ -19,16 +19,11 @@ export default function Navbar() {
           <>
             <li className="push-left">
               <Link href="/admin">
-                <button className="btn-blue">Write Posts</button>
+                <button className="btn-blue">Post</button>
               </Link>
             </li>
-            {/* <li>
-              <Link href="/">
-                <SignOutButton />
-              </Link>
-            </li> */}
             <li>
-              <Link href={`/${username}`}>
+              <Link href={`/admin`}>
                 <img src={user?.photoURL || "/hacker.png"} />
               </Link>
             </li>

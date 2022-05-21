@@ -3,6 +3,7 @@ import { useContext, useEffect, useState, useCallback } from "react";
 import { UserContext } from "../lib/context";
 import { debounce } from "lodash";
 import toast from "react-hot-toast";
+import { useRouter } from "next/router";
 
 export default function Enter(props) {
   const { user, username } = useContext(UserContext);
@@ -17,10 +18,15 @@ export default function Enter(props) {
         !username ? (
           <UsernameForm />
         ) : (
-          <SignOutButton />
+          <div>
+            <h2>Are you sure?</h2>
+            <SignOutButton />
+          </div>
         )
       ) : (
-        <SignInButton />
+        <div>
+          <SignInButton />
+        </div>
       )}
     </main>
   );
@@ -58,6 +64,7 @@ function UsernameForm() {
   const [formValue, setFormValue] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const { user, username } = useContext(UserContext);
 
@@ -101,7 +108,6 @@ function UsernameForm() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-
     // Create references for both documents
     const userDoc = firestore.doc(`users/${user.uid}`);
     const usernameDoc = firestore.doc(`usernames/${formValue}`);
@@ -115,7 +121,8 @@ function UsernameForm() {
     batch.set(usernameDoc, { uid: user.uid });
     try {
       await batch.commit();
-      toast.success(`Success! Username ${formValue} created.`);
+      router.push("/");
+      toast.success(`Success! Username '${formValue}' created`);
     } catch (error) {
       toast.error(`Error: ${error}`);
     }
@@ -124,7 +131,7 @@ function UsernameForm() {
   return (
     !username && (
       <section>
-        <h3>Choose Username</h3>
+        <h3>Create Username</h3>
         <form onSubmit={onSubmit}>
           <input
             name="username"
@@ -137,18 +144,19 @@ function UsernameForm() {
             isValid={isValid}
             loading={loading}
           />
+
           <button type="submit" className="btn-green" disabled={!isValid}>
-            Choose
+            Create
           </button>
 
-          <h3>Debug State</h3>
+          {/* <h3>Debug State</h3>
           <div>
             Username: {formValue}
             <br />
             Loading: {loading.toString()}
             <br />
             Username Valid: {isValid.toString()}
-          </div>
+          </div> */}
         </form>
       </section>
     )
