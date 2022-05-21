@@ -23,7 +23,9 @@ export default function Navbar() {
               </Link>
             </li>
             <li>
-              <SignOutButton />
+              <Link href="/">
+                <SignOutButton />
+              </Link>
             </li>
             <li>
               <Link href={`/${username}`}>

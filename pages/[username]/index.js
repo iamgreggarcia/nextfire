@@ -1,7 +1,6 @@
 import UserProfile from "../../components/UserProfile";
 import PostFeed from "../../components/PostFeed";
 import { getUserWithUsername, postToJSON } from "../../lib/firebase";
-import Link from "next/link";
 
 export async function getServerSideProps({ query }) {
   const { username } = query;
@@ -38,9 +37,6 @@ export default function UserProfilePage({ user, posts }) {
     <main>
       <UserProfile user={user} />
       <PostFeed posts={posts} />
-      <Link href="/enter">
-        <button>Log Out</button>
-      </Link>
     </main>
   );
 }

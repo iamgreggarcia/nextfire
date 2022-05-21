@@ -1,7 +1,6 @@
 import AuthCheck from "../../components/AuthCheck";
 import { firestore, auth } from "../../lib/firebase";
 import PostFeed from "../../components/PostFeed";
-import Loader from "../../components/Loader";
 
 import { UserContext } from "../../lib/context";
 import { useContext, useState } from "react";
