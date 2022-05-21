@@ -6,7 +6,7 @@ export default function PostContent({ post }) {
   const createdAt =
     typeof post?.createdAt === "number"
       ? new Date(post.createdAt)
-      : post.createdAt.toDate();
+      : post.createdAt.`to`Date();
 
   return (
     <div className="card">

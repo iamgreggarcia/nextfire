@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { auth } from "../lib/firebase";
 import { useContext } from "react";
 import { UserContext } from "../lib/context";
 
@@ -22,6 +23,9 @@ export default function Navbar() {
               </Link>
             </li>
             <li>
+              <SignOutButton />
+            </li>
+            <li>
               <Link href={`/${username}`}>
                 <img src={user?.photoURL || "/hacker.png"} />
               </Link>
@@ -40,4 +44,9 @@ export default function Navbar() {
       </ul>
     </nav>
   );
+}
+
+// Sign out button
+function SignOutButton() {
+  return <button onClick={() => auth.signOut()}>Sign Out</button>;
 }
