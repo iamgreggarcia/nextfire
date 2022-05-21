@@ -4,16 +4,46 @@ import { UserContext } from "../lib/context";
 import { debounce } from "lodash";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
+import Loader from "../components/Loader";
 
 export default function Enter(props) {
   const { user, username } = useContext(UserContext);
-
+  const [loading, setLoading] = useState(false);
   // 1. user signed out <SignInButton />
   // 2. user signed in, but missing username <UsernnameForm />
   // 3. user signed in, has username <SignOutButton />
 
+  // Sign in with Google or anonymously
+  function SignInButton() {
+    const router = useRouter();
+
+    const signInWithGoogle = async () => {
+      try {
+        setLoading(true);
+        await auth.signInWithPopup(googleAuthProvider);
+        router.push("/");
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const signInAnon = () => {
+      auth.signInAnonymously();
+    };
+
+    return (
+      <>
+        <button className="btn-google" onClick={signInWithGoogle}>
+          <img src={"/google.png"} /> Sign in with Google
+        </button>
+        <button onClick={signInAnon}>Sign in Anonymously</button>
+      </>
+    );
+  }
+
   return (
     <main>
+      <Loader show={loading} />
       {user ? (
         !username ? (
           <UsernameForm />
@@ -29,28 +59,6 @@ export default function Enter(props) {
         </div>
       )}
     </main>
-  );
-}
-
-// Sign in with Google button.
-function SignInButton() {
-  const signInWithGoogle = async () => {
-    try {
-      await auth.signInWithPopup(googleAuthProvider);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  return (
-    <>
-      <button className="btn-google" onClick={signInWithGoogle}>
-        <img src={"/google.png"} /> Sign in with Google
-      </button>
-      <button onClick={() => auth.signInAnonymously()}>
-        Sign in Anonymously
-      </button>
-    </>
   );
 }
 
@@ -107,6 +115,7 @@ function UsernameForm() {
   );
 
   const onSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     // Create references for both documents
     const userDoc = firestore.doc(`users/${user.uid}`);
@@ -120,9 +129,10 @@ function UsernameForm() {
     });
     batch.set(usernameDoc, { uid: user.uid });
     try {
-      await batch.commit();
       router.push("/");
+      await batch.commit();
       toast.success(`Success! Username '${formValue}' created`);
+      setLoading(false);
     } catch (error) {
       toast.error(`Error: ${error}`);
     }
