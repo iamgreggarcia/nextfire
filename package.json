@@ -22,8 +22,11 @@
     "react-markdown": "^8.0.3"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.2.0",
     "eslint": "8.14.0",
     "eslint-config-next": "12.1.6",
+    "jest": "^28.1.0",
     "react-test-renderer": "^18.1.0"
   }
 }
