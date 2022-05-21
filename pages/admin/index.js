@@ -17,19 +17,26 @@ export default function AdminPostsPage({}) {
   return (
     <main>
       <AuthCheck>
-        <LogOut />
         <PostList />
         <CreateNewPost />
+        <LogOut />
       </AuthCheck>
     </main>
   );
 }
 
 function LogOut() {
+  const { username } = useContext(UserContext);
+
   return (
-    <Link href="/enter">
-      <button> Log Out</button>
-    </Link>
+    <>
+      <Link href="/enter">
+        <button> Log Out</button>
+      </Link>
+      <Link href={`/${username}`}>
+        <button className="btn-blue">My Profile</button>
+      </Link>
+    </>
   );
 }
 
@@ -98,12 +105,12 @@ function CreateNewPost() {
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="My awesome article title"
+          placeholder="My awesome title"
           className={styles.input}
         />
-        <p>
+        {/* <p>
           <strong>Slug:</strong> {slug}
-        </p>
+        </p> */}
         <button type="submit" disabled={!isValid} className="btn-green">
           Create New Post
         </button>
