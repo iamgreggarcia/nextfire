@@ -12,6 +12,10 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import toast, { useToasterStore } from "react-hot-toast";
 
+const MAX_LENGTH = 2000;
+const MIN_LENGTH = 10;
+const CONTENT_REQUIRED = true;
+
 export default function AdminPostsEdit({}) {
   return (
     <AuthCheck>
@@ -95,9 +99,12 @@ function PostForm({ defaultValues, postRef, preview }) {
         <ImageUploader />
         <textarea
           {...register("content", {
-            required: { value: true, message: "content is required" },
-            minLength: { value: 10, message: "content is too short" },
-            maxLength: { value: 2000, message: "content is too long" },
+            required: {
+              value: CONTENT_REQUIRED,
+              message: "content is required",
+            },
+            minLength: { value: MIN_LENGTH, message: "content is too short" },
+            maxLength: { value: MAX_LENGTH, message: "content is too long" },
           })}
         ></textarea>
         {formState.errors.content && (
@@ -109,7 +116,7 @@ function PostForm({ defaultValues, postRef, preview }) {
             className={styles.checkbox}
             {...register("published")}
           />
-          <label>Published</label>
+          <label>Publish</label>
         </fieldset>
         <button
           type="submit"
