@@ -40,7 +40,7 @@ function PostManager() {
         <>
           <section>
             <h1>{post.title}</h1>
-            <p>ID: {post.slug}</p>
+            {/* <p>ID: {post.slug}</p> */}
 
             <PostForm
               postRef={postRef}
