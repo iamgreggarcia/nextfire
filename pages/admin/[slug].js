@@ -123,7 +123,7 @@ function PostForm({ defaultValues, postRef, preview }) {
           className="btn-green"
           disabled={!isDirty || !isValid}
         >
-          Save Changes
+          Save
         </button>
       </div>
     </form>
